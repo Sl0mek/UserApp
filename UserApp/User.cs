@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UserApp
 {
@@ -40,38 +38,32 @@ namespace UserApp
         #region METHODS
         private string getFirstNameFromUser()
         {
-            Console.WriteLine("Podaj imie:");
-            Console.Write("> ");
+            Console.Write("Podaj imie:\n> ");
             return Console.ReadLine();
         }
         private string getLastNameFromUser()
         {
-            Console.WriteLine("Podaj nazwisko:");
-            Console.Write("> ");
+            Console.Write("Podaj nazwisko:\n> ");
             return Console.ReadLine();
         }
         private string getPlaceOfBirthUser()
         {
-            Console.WriteLine("Podaj miejsce urodzin:");
-            Console.Write("> ");
+            Console.Write("Podaj miejsce urodzin:\n> ");
             return Console.ReadLine();
         }
         private string getDayOfBirthFromUser()
         {
-            Console.WriteLine("Podaj dzień urodzin:");
-            Console.Write("> ");
+            Console.Write("Podaj dzień urodzin:\n> ");
             return Console.ReadLine();
         }
         private string getMonthOfBirthFromUser()
         {
-            Console.WriteLine("Podaj miesiąc urodzin:");
-            Console.Write("> ");
+            Console.Write("Podaj miesiąc urodzin:\n> ");
             return Console.ReadLine();
         }
         private string getYearOfBirthFromUser()
         {
-            Console.WriteLine("Podaj rok urodzin:");
-            Console.Write("> ");
+            Console.Write("Podaj rok urodzin:\n> ");
             return Console.ReadLine();
         }
         private DateTime getDateOfBirthFromUser()
@@ -118,17 +110,26 @@ namespace UserApp
                     year = 0;
                 }
             } while (year == 0);
-            return new DateTime(year, month, day);
+            try
+            {
+                return new DateTime(year, month, day);
+            }
+            catch(Exception e)
+            {
+                //Console.WriteLine(e.Message);
+                Console.WriteLine("Podana data nie istnieje! Proszę podać poprawną datę.");
+                return getDateOfBirthFromUser();
+            }
         }
         public void Show()
         {
-            Console.WriteLine($"Cześć {this._firstName} {this._lastName}, urodziłeś się w {this._placeOfBirth} i masz {calculateTheNumberOfYears()} lat");
+            Console.WriteLine($"Cześć {this._firstName} {this._lastName}, urodziłeś się w {this._placeOfBirth} i masz {calculateAge()} lat.");
         }
-        private int calculateTheNumberOfYears()
+        private int calculateAge()
         {
-            DateTime now = DateTime.Now;
-            TimeSpan period = now - this._dateOfBirth;
-            return period.Days/365;
+            var age = DateTime.Now.Year - this._dateOfBirth.Year;
+            if (DateTime.Now.DayOfYear < this._dateOfBirth.DayOfYear) age = age - 1;
+            return age;
         }
         #endregion
 
@@ -145,7 +146,7 @@ namespace UserApp
         }
         private bool isYearValid(int year)
         {
-            if (year > 0 && year <= DateTime.Now.Year) return true;
+            if (year <= DateTime.Now.Year) return true;
             else return false;
         }
         #endregion
